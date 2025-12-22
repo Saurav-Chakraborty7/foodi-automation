@@ -48,11 +48,22 @@ exports.config = {
   // https://saucelabs.com/platform/platform-configurator
   //
   capabilities: [
-    {
-      browserName: "chrome",
-    },
-  ],
+  {
+    browserName: "chrome",
+    "goog:chromeOptions": {
+      args: [
+        "--disable-infobars",
+        "--disable-notifications",
+        "--disable-geolocation",
+      ],
+      prefs: {
+        "profile.default_content_setting_values.geolocation": 1
+      }
+    }
+  }
+],
 
+  
   //
   // ===================
   // Test Configurations

@@ -19,5 +19,10 @@ class RestaurantAndCartActions {
     await restaurantAndCartLocators.foodiLogo.waitForDisplayed({ timeout: 10000 });
     await restaurantAndCartLocators.foodiLogo.click();
   }
+
+  // async clickOnBanglaFindFood() {
+  //   await restaurantAndCartLocators.banglaFindFood.waitForDisplayed({ timeout: 10000 });
+  //   await restaurantAndCartLocators.banglaFindFood.click();
+  // }
 }
 module.exports = new RestaurantAndCartActions();
