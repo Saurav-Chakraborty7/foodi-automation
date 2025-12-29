@@ -11,9 +11,9 @@ class RestaurantAndCartLocators {
     get foodiLogo(){
         return $("//a[normalize-space()='']//img[@alt='Logo']");
     }
-    // get banglaFindFood(){
-    //     return $('//*[@id="foodi-hero"]/div/div/div[1]/div/form/div/button');
-    // }
+    get allRestaurants(){
+        return $$("//a[contains(@href,'/restaurant')]");
+    }
 
 }
 

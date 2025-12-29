@@ -13,7 +13,7 @@ module.exports = async function captureLocationEveryRun() {
     fs.mkdirSync(dirPath);
   }
 
-  console.log("📍 Capturing Foodi location for this run...");
+  //console.log("📍 Capturing Foodi location for this run...");
 
   // Let Foodi resolve location normally
   await restaurantActions.clickOnReLocationButton();
@@ -34,5 +34,5 @@ module.exports = async function captureLocationEveryRun() {
     JSON.stringify(locationData, null, 2)
   );
 
-  console.log("✅ Location captured for this run");
+  //console.log("✅ Location captured for this run");
 };
