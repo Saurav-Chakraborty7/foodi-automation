@@ -40,5 +40,25 @@ class RestaurantAndCartActions {
     await restaurants[randomIndex].waitForClickable({ timeout: 10000 });
     await restaurants[randomIndex].click();
   }
+
+  async selectRandomFoodItem() {
+    const foodItems = await restaurantAndCartLocators.allFoodItems;
+    const count = foodItems.length;
+    if (count === 0) {
+      throw new Error("No Food Items found for this restaurant");
+    }
+    const randomIndex = Math.floor(Math.random() * count);
+    console.log(`🚀 Selecting food item index: ${randomIndex + 1} / ${count}`);
+    await foodItems[randomIndex].scrollIntoView({ block: "center" });
+    await foodItems[randomIndex].waitForClickable({ timeout: 10000 });
+    await foodItems[randomIndex].click();
+  }
+
+  async clickAddToCartButton() {
+      await restaurantAndCartLocators.addToCartButton.waitForDisplayed({
+      timeout: 10000,
+    });
+    await restaurantAndCartLocators.addToCartButton.click();
+  }
 }
 module.exports = new RestaurantAndCartActions();

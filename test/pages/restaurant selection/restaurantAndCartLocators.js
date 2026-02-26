@@ -14,6 +14,12 @@ class RestaurantAndCartLocators {
     get allRestaurants(){
         return $$("//a[contains(@href,'/restaurant')]");
     }
+    get allFoodItems(){
+        return $$("//div[@class='item cursor-pointer relative']");
+    }
+    get addToCartButton(){
+        return $("//button[normalize-space()='Add to cart']");
+    }
 
 }
 

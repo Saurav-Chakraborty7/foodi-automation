@@ -38,8 +38,14 @@ describe("Foodi's Restaurant selection and Food ordering", () => {
     await browser.pause(10000);
   });
 
-  it("Randomly select restaurant", async () => {
+  it("TC-006: Randomly select restaurant", async () => {
     await restaurantAndCartActions.selectRandomRestaurant();
     await browser.pause(5000);
+  });
+
+  it("TC-007: Selecting random food item from restaurant and Add to cart", async () => {
+    await restaurantAndCartActions.selectRandomFoodItem();
+    await restaurantAndCartActions.clickAddToCartButton();
+    await browser.pause(10000);
   });
 });
