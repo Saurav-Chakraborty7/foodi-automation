@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 const localStorage = require("../utils/localStorage");
-const restaurantActions = require("../pages/restaurant selection/restaurantAndCartActions");
+const restaurantActions = require("../pages/restaurant and cart selection/restaurantAndCartActions");
 
 module.exports = async function captureLocationEveryRun() {
   const dirPath = path.resolve("./test-data");

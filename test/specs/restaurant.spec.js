@@ -1,4 +1,4 @@
-const restaurantAndCartActions = require("../pages/restaurant selection/restaurantAndCartActions");
+const restaurantAndCartActions = require("../pages/restaurant and cart selection/restaurantAndCartActions");
 const email = "kinyce@fxzig.com";
 const password = "123456Asd*";
 const utils = require("../utils/utils");
