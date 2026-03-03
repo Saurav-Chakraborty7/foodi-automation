@@ -60,5 +60,13 @@ class RestaurantAndCartActions {
     });
     await restaurantAndCartLocators.addToCartButton.click();
   }
+  async getOriginalPrice() {
+    const originalPrice = await restaurantAndCartLocators.originalPrice;
+    return parseInt(originalPrice.textContent.replace(/[^\d]/g, ''))
+  }
+  async getDiscountedPrice() {
+    const discountedPrice = await restaurantAndCartLocators.discountedPrice;
+    return parseInt(discountedPrice.textContent.replace(/[^\d]/g, ''))
+  }
 }
 module.exports = new RestaurantAndCartActions();

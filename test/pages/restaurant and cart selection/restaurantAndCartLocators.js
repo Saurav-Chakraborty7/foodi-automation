@@ -21,6 +21,14 @@ class RestaurantAndCartLocators {
         return $("//button[normalize-space()='Add to cart']");
     }
 
+    //Cart
+    get originalPrice(){
+        return $("//p[@class='text-sm text-gray-500 line-through ']");
+    }
+    get discountedPrice(){
+        return $("//p[@class='text-sm text-gray-600 ']");
+    }
+
 }
 
 module.exports = new RestaurantAndCartLocators();
