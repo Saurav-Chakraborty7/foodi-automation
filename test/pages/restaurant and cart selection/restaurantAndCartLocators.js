@@ -22,8 +22,23 @@ class RestaurantAndCartLocators {
     }
 
     //Cart
-    get originalPrice(){
-        return $("//p[@class='text-sm text-gray-500 line-through ']");
+    get checkoutButton(){
+        return $("//button[contains(normalize-space(),'Go To Checkout')]");
+    }
+    get subtotalPrice(){
+        return $("//p[contains(normalize-space(),'Subtotal')]");
+    }
+    get deliveryfreePrice(){
+        return $("//p[contains(normalize-space(),'Delivery Fee')]");
+    }
+    get vatPrice(){
+        return $("//p[contains(normalize-space(),'VAT')]");
+    }
+    get platformfeePrice(){
+        return $("//p[contains(normalize-space(),'Platform Fee')]");
+    }
+    get totalpayablePrice(){
+        return $("//p[contains(normalize-space(),'Total Payable')]");
     }
     get discountedPrice(){
         return $("//p[@class='text-sm text-gray-600 ']");

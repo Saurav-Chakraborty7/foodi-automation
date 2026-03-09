@@ -22,7 +22,7 @@ describe("Foodi's Restaurant selection and Food ordering", () => {
 
     const locationPath = path.resolve(
       __dirname,
-      "../../test-data/location.json"
+      "../../test-data/location.json",
     );
     const locationData = JSON.parse(fs.readFileSync(locationPath, "utf-8"));
 
@@ -47,5 +47,19 @@ describe("Foodi's Restaurant selection and Food ordering", () => {
     await restaurantAndCartActions.selectRandomFoodItem();
     await restaurantAndCartActions.clickAddToCartButton();
     await browser.pause(10000);
+  });
+
+  it("TC-008: Checkout and verify order", async () => {
+    await restaurantAndCartActions.clickOnCheckoutButton();
+
+    const subtotal = await restaurantAndCartActions.subtotalPrice();
+    const delivery = await restaurantAndCartActions.deliveryfreePrice();
+    const vat = await restaurantAndCartActions.vatPrice();
+    const platform = await restaurantAndCartActions.platformfeePrice();
+    const total = await restaurantAndCartActions.totalpayablePrice();
+
+    const expectedTotal = subtotal + delivery + vat + platform;
+
+    expect(total).toEqual(expectedTotal);
   });
 });
