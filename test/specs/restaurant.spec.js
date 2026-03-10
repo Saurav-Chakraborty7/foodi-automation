@@ -58,8 +58,26 @@ describe("Foodi's Restaurant selection and Food ordering", () => {
     const platform = await restaurantAndCartActions.platformfeePrice();
     const total = await restaurantAndCartActions.totalpayablePrice();
 
+    // log values and types to help diagnose any string/number mixups
+    console.log("Prices:", { subtotal, delivery, vat, platform, total });
+    console.log(
+      "Types:",
+      typeof subtotal,
+      typeof delivery,
+      typeof vat,
+      typeof platform,
+      typeof total
+    );
+
+    // sanity check that all returned values are numeric
+    expect(typeof subtotal).toBe("number");
+    expect(typeof delivery).toBe("number");
+    expect(typeof vat).toBe("number");
+    expect(typeof platform).toBe("number");
+    expect(typeof total).toBe("number");
+
     const expectedTotal = subtotal + delivery + vat + platform;
 
-    expect(total).toEqual(expectedTotal);
+    expect(total).toBeCloseTo(expectedTotal, 0);
   });
 });

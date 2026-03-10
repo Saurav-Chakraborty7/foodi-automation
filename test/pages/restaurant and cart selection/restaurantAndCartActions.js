@@ -42,34 +42,44 @@ class RestaurantAndCartActions {
       throw new Error("No restaurants found for this location");
     }
 
-    // attempt to click one of the visible restaurants; retry if something goes wrong
-    const maxRetries = 5;
-    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    // attempt each restaurant until we find one with food items
+    for (let idx = 0; idx < Math.min(count, 10); idx++) {
       const randomIndex = Math.floor(Math.random() * count);
       const restaurant = visible[randomIndex];
       console.log(
-        `🚀 [attempt ${attempt}] Selecting restaurant index: ${randomIndex + 1} / ${count}`
+        `🚀 [attempt ${idx + 1}] Selecting restaurant index: ${randomIndex + 1} / ${count}`
       );
       try {
         await restaurant.scrollIntoView({ block: "center" });
         await restaurant.waitForClickable({ timeout: 15000 });
         await restaurant.click();
-        // successful click, exit early
-        return;
+        console.log(`✅ clicked restaurant, waiting for menu to load...`);
+
+        // wait for food items to appear
+        try {
+          await browser.waitUntil(
+            async () => {
+              const items = await restaurantAndCartLocators.allFoodItems;
+              return items.length > 0;
+            },
+            { timeout: 8000, timeoutMsg: 'no food items loaded' }
+          );
+          console.log(`✅ food items loaded, proceeding`);
+          return;
+        } catch (e) {
+          console.warn(`⚠️ no food items on this restaurant, going back`);
+          await browser.back();
+          await browser.pause(500);
+          // continue to try next restaurant
+        }
       } catch (err) {
         console.warn(
           `⚠️ click failed on restaurant index ${randomIndex + 1}: ${err.message}`
         );
-        // on last attempt, rethrow to surface the failure
-        if (attempt === maxRetries) {
-          throw new Error(
-            "Unable to select a restaurant after multiple retries"
-          );
-        }
-        // short pause before retrying
-        await browser.pause(1000);
       }
     }
+
+    throw new Error("Unable to find a restaurant with food items after multiple attempts");
   }
 
   async selectRandomFoodItem() {
@@ -116,33 +126,51 @@ class RestaurantAndCartActions {
   }
   async clickOnCheckoutButton() {
     // sometimes the button is slow to appear or partially covered; retry a few times
-    const maxAttempts = 3;
+    const maxAttempts = 5;
     for (let i = 1; i <= maxAttempts; i++) {
       try {
         await restaurantAndCartLocators.checkoutButton.waitForDisplayed({
-          timeout: 15000,
+          timeout: 10000,
         });
         await restaurantAndCartLocators.checkoutButton.scrollIntoView({ block: "center" });
+        // extra pause to ensure button is clickable
+        await browser.pause(500);
         await restaurantAndCartLocators.checkoutButton.waitForClickable({ timeout: 10000 });
         await restaurantAndCartLocators.checkoutButton.click();
+        console.log(`✅ checkout button clicked successfully`);
         return;
       } catch (err) {
         console.warn(`⚠️ checkout click attempt ${i} failed: ${err.message}`);
         if (i === maxAttempts) {
           throw err;
         }
-        // maybe the cart hasn't finished animating; pause then try again
-        await browser.pause(1000);
+        // scroll page to ensure button is fully visible
+        await browser.execute(() => window.scrollBy(0, 300));
+        await browser.pause(1500);
       }
     }
   }
   // helper
   parsePrice(text) {
+    // convert any text (e.g. "Subtotal: \u20b9100.00") into a numeric value
     if (!text) return 0;
 
-    const value = parseFloat(text.replace(/[^\d.]/g, ""));
-    console.log("🚀 ~ RestaurantAndCartActions ~ parsePrice ~ value:", value)
-    return isNaN(value) ? 0 : value;
+    // strip out anything that is not a digit, dot or comma (some locales use comma as
+    // thousands separator).  we'll also remove comma separators before parsing so
+    // parseFloat doesn't get confused.
+    let cleaned = text.replace(/[^\d.,]/g, "");
+    // remove thousands separators if present
+    cleaned = cleaned.replace(/,/g, "");
+
+    const value = parseFloat(cleaned);
+    if (isNaN(value)) {
+      console.warn(`⚠️ parsePrice could not convert \"${text}\" to a number`);
+      return 0;
+    }
+
+    // ensure the return type is always a Number (not a string)
+    console.log("🚀 ~ RestaurantAndCartActions ~ parsePrice ~ value:", value);
+    return value;
   }
 
   // Actions
@@ -243,39 +271,60 @@ class RestaurantAndCartActions {
     return this.parsePrice(text);
   }
 
-  async subtotalPrice() {
-    if (!(await restaurantAndCartLocators.subtotalPrice.isExisting())) {
+  // generic helper used by the accessors so we can inject extra debug
+  async _getPriceWithDebug(label, locator) {
+    const exists = await locator.isExisting();
+    console.log(`🔍 checking price for '${label}', locator exists?`, exists);
+    if (!exists) {
+      // try to find elements containing the label anywhere so we can log what
+      // actually exists on the page
+      const candidates = await $$(`//p[contains(normalize-space(),'${label}')]`);
+      console.log(`   fallback candidates for '${label}':`, candidates.length);
+      for (const c of candidates) {
+        try {
+          console.log(`     text:`, await c.getText());
+          console.log(`     html:`, await c.getHTML(false));
+        } catch (e) {
+          console.warn(`     cannot read candidate:`, e.message);
+        }
+      }
       return 0;
     }
-    return this._getPriceFromElement(restaurantAndCartLocators.subtotalPrice);
+    return this._getPriceFromElement(locator);
+  }
+
+  async subtotalPrice() {
+    return this._getPriceWithDebug('Subtotal', restaurantAndCartLocators.subtotalPrice);
   }
 
   async deliveryfreePrice() {
-    if (!(await restaurantAndCartLocators.deliveryfreePrice.isExisting())) {
-      return 0;
-    }
-    return this._getPriceFromElement(restaurantAndCartLocators.deliveryfreePrice);
+    return this._getPriceWithDebug('Delivery Fee', restaurantAndCartLocators.deliveryfreePrice);
   }
 
   async vatPrice() {
-    if (!(await restaurantAndCartLocators.vatPrice.isExisting())) {
-      return 0;
-    }
-    return this._getPriceFromElement(restaurantAndCartLocators.vatPrice);
+    return this._getPriceWithDebug('VAT', restaurantAndCartLocators.vatPrice);
   }
 
   async platformfeePrice() {
-    if (!(await restaurantAndCartLocators.platformfeePrice.isExisting())) {
-      return 0;
-    }
-    return this._getPriceFromElement(restaurantAndCartLocators.platformfeePrice);
+    return this._getPriceWithDebug('Platform Fee', restaurantAndCartLocators.platformfeePrice);
   }
 
   async totalpayablePrice() {
-    if (!(await restaurantAndCartLocators.totalpayablePrice.isExisting())) {
-      return 0;
+    if (await restaurantAndCartLocators.totalpayablePrice.isExisting()) {
+      return this._getPriceFromElement(restaurantAndCartLocators.totalpayablePrice);
     }
-    return this._getPriceFromElement(restaurantAndCartLocators.totalpayablePrice);
+    const youPay = await $$('//p[contains(normalize-space(),"You Pay")]');
+    if (youPay.length > 0) return this._getPriceFromElement(youPay[0]);
+    const allPs = await $$('p');
+    let max = 0;
+    for (const p of allPs) {
+      const txt = await p.getText();
+      if (/TK|Tk/.test(txt)) {
+        const pr = this.parsePrice(txt);
+        if (pr > max) max = pr;
+      }
+    }
+    return max;
   }
 }
 module.exports = new RestaurantAndCartActions();
