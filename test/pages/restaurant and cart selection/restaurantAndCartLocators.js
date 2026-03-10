@@ -26,19 +26,19 @@ class RestaurantAndCartLocators {
         return $("//button[contains(normalize-space(),'Go To Checkout')]");
     }
     get subtotalPrice(){
-        return $("//p[contains(normalize-space(),'Subtotal')]");
+        return $("//p[contains(normalize-space(),'Subtotal')]/following-sibling::p[contains(@class,'font-bold')]");
     }
     get deliveryfreePrice(){
-        return $("//p[contains(normalize-space(),'Delivery Fee')]");
+        return $("//p[contains(normalize-space(),'Delivery Fee')]/following-sibling::p[contains(@class,'font-bold')]");
     }
     get vatPrice(){
-        return $("//p[contains(normalize-space(),'VAT')]");
+        return $("//p[contains(normalize-space(),'VAT')]/following-sibling::p[contains(@class,'font-bold')]");
     }
     get platformfeePrice(){
-        return $("//p[contains(normalize-space(),'Platform Fee')]");
+        return $("//p[contains(normalize-space(),'Platform Fee')]/following-sibling::p[contains(@class,'font-bold')]");
     }
     get totalpayablePrice(){
-        return $("//p[contains(normalize-space(),'Total Payable')]");
+        return $("//p[contains(normalize-space(),'Total Payable')]/following-sibling::p[contains(@class,'font-bold')]");
     }
     get discountedPrice(){
         return $("//p[@class='text-sm text-gray-600 ']");
