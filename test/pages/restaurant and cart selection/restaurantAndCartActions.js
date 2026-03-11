@@ -29,7 +29,6 @@ class RestaurantAndCartActions {
   }
 
   async selectRandomRestaurant() {
-    // grab all restaurants and filter out any that are not currently displayed
     let restaurants = await restaurantAndCartLocators.allRestaurants;
     const visible = [];
     for (const r of restaurants) {
