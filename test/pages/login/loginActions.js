@@ -23,7 +23,6 @@ class LoginActions {
   async clickOnSignInAfterCredrentials() {
     await loginLocators.signInAfterCredrentials.waitForDisplayed({ timeout: 10000 });
     await loginLocators.signInAfterCredrentials.click();
-    await driver.pause(5000);
   }
 
   async clickOnProfileIcon() {

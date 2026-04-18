@@ -10,7 +10,6 @@ describe("Foodi's Login Test Suite", () => {
   afterEach(async () => {
     try {
       await loginActions.clickOnProfileIcon();
-      await browser.pause(2000);
       await loginActions.clickOnLogOutButton();
     } catch (error) {
       // User is not logged in, skip logout

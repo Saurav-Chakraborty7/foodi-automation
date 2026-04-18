@@ -4,7 +4,7 @@ A WebdriverIO-based end-to-end automation suite for the [Foodi](https://foodibd.
 
 ---
 
-## 🔧 Project Structure
+##  Project Structure
 
 ```
 package.json
@@ -36,7 +36,7 @@ test-data/              # persisted artifacts (e.g. location.json)
 
 > **Note:** folder names containing spaces (`restaurant selection`) match the original project layout.
 
-## ✅ What the tests cover
+## What the tests cover
 
 * **Login Suite** (`login.spec.js`)
   * Valid and invalid credential flows
@@ -53,7 +53,7 @@ Support code includes helpers for setting location in localStorage, capturing it
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -98,7 +98,7 @@ Location information is stored in `test-data/location.json`.  The `location.setu
 
 ---
 
-## 📝 Notes
+## Notes
 
 * Logging is silenced (`logLevel: "silent"`) to keep output clean.
 * The project uses Mocha with BDD syntax and the `spec` reporter.

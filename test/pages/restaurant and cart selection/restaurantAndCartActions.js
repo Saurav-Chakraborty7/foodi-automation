@@ -68,7 +68,6 @@ class RestaurantAndCartActions {
         } catch (e) {
           console.warn(`⚠️ no food items on this restaurant, going back`);
           await browser.back();
-          await browser.pause(500);
           // continue to try next restaurant
         }
       } catch (err) {
@@ -132,8 +131,6 @@ class RestaurantAndCartActions {
           timeout: 10000,
         });
         await restaurantAndCartLocators.checkoutButton.scrollIntoView({ block: "center" });
-        // extra pause to ensure button is clickable
-        await browser.pause(500);
         await restaurantAndCartLocators.checkoutButton.waitForClickable({ timeout: 10000 });
         await restaurantAndCartLocators.checkoutButton.click();
         console.log(`✅ checkout button clicked successfully`);
@@ -145,7 +142,6 @@ class RestaurantAndCartActions {
         }
         // scroll page to ensure button is fully visible
         await browser.execute(() => window.scrollBy(0, 300));
-        await browser.pause(1500);
       }
     }
   }
