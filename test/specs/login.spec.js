@@ -1,10 +1,7 @@
 const loginActions = require("../pages/login/loginActions");
-const utils = require("../utils/utils");
 const auth = require("../utils/auth");
 const loginLocators = require("../pages/login/loginLocators");
-const restaurantAndCartActions = require("../pages/restaurant selection/restaurantAndCartActions");
-const email = "kinyce@fxzig.com";
-const password = "123456Asd*";
+const { credentials, expectedMessages } = require("../../test-data/testData");
 
 describe("Foodi's Login Test Suite", () => {
   afterEach(async () => {
@@ -18,22 +15,22 @@ describe("Foodi's Login Test Suite", () => {
   });
   
   it("TC-001: Should login with valid credentials", async () => {
-    await auth.loginAsValidUser(email, password);
+    await auth.loginAsValidUser(credentials.validUser.email, credentials.validUser.password);
   });
 
   it("TC-002: Should not login with invalid credentials", async () => {
-    await auth.loginAsValidUser(email, password+"wrong");
-    await expect($("//p[@class='fd-text-primary-600']")).toHaveText(
-      "Sorry! Invalid email or password!"
+    await auth.loginAsValidUser(credentials.invalidUser.email, credentials.invalidUser.password);
+    await expect(loginLocators.invalidLoginMessage).toHaveText(
+      expectedMessages.invalidLogin
     );
     await loginActions.clickOnCloseButton();
   });
 
   it("TC-003:Should not login with empty credentials", async () => {
-    await auth.loginAsValidUser(" "," ");
+    await auth.loginAsValidUser(credentials.emptyUser.email, credentials.emptyUser.password);
     await loginActions.clickOnSignInAfterCredrentials();
-    await expect($("//small[@class='p-error']")).toHaveText(
-      "Email is a required field"
+    await expect(loginLocators.emailValidationError).toHaveText(
+      expectedMessages.emptyEmail
     );
     await loginActions.clickOnCloseButton();
   });

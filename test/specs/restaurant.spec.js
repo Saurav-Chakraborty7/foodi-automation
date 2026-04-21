@@ -1,14 +1,12 @@
 const restaurantAndCartActions = require("../pages/restaurant and cart selection/restaurantAndCartActions");
-const email = "kinyce@fxzig.com";
-const password = "123456Asd*";
-const utils = require("../utils/utils");
 const auth = require("../utils/auth");
 const localStorage = require("../utils/localStorage");
 const captureLocationEveryRun = require("../setup/location.setup");
+const { credentials } = require("../../test-data/testData");
 
 describe("Foodi's Restaurant selection and Food ordering", () => {
   before(async () => {
-    await auth.loginAsValidUser(email, password);
+    await auth.loginAsValidUser(credentials.validUser.email, credentials.validUser.password);
 
     await $('img[alt="Logo"]').waitForDisplayed({ timeout: 15000 });
 
