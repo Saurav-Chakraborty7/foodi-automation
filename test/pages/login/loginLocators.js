@@ -23,5 +23,11 @@ class LoginLocators{
     get closeButton(){
         return $("//button[@aria-label='Close']//*[name()='svg']");
     }
+    get invalidLoginMessage(){
+        return $("//p[@class='fd-text-primary-600']");
+    }
+    get emailValidationError(){
+        return $("//small[@class='p-error']");
+    }
 }
 module.exports = new LoginLocators();
