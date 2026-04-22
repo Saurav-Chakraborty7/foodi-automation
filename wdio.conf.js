@@ -216,7 +216,6 @@ exports.config = {
   beforeSuite: async function (suite) {
     await browser.maximizeWindow();
     await browser.url(this.baseUrl);
-    await browser.pause(3000);
   },
   /**
    * Function to be executed before a test (in Mocha/Jasmine) starts.
