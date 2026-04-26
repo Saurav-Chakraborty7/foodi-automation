@@ -1,4 +1,5 @@
 const fs = require("fs");
+const { timeouts } = require("../../test-data/testData");
 const path = require("path");
 
 const localStorage = require("../utils/localStorage");
@@ -21,7 +22,7 @@ module.exports = async function captureLocationEveryRun() {
   await restaurantActions.clickOnSubmitButton();
 
   // Wait until app is stable
-  await $('img[alt="Logo"]').waitForDisplayed({ timeout: 15000 });
+  await $('img[alt="Logo"]').waitForDisplayed({ timeout: timeouts.long });
 
   const locationData = await localStorage.captureLocation();
 

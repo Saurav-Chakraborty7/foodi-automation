@@ -1,29 +1,30 @@
 const restaurantAndCartLocators = require("./restaurantAndCartLocators");
+const { timeouts } = require("../../../test-data/testData");
 class RestaurantAndCartActions {
   async clickOnLocationButton() {
     await restaurantAndCartLocators.locationInput.waitForDisplayed({
-      timeout: 10000,
+      timeout: timeouts.default,
     });
     await restaurantAndCartLocators.locationInput.click();
   }
 
   async clickOnReLocationButton() {
     await restaurantAndCartLocators.reLocationInput.waitForDisplayed({
-      timeout: 10000,
+      timeout: timeouts.default,
     });
     await restaurantAndCartLocators.reLocationInput.click();
   }
 
   async clickOnSubmitButton() {
     await restaurantAndCartLocators.submitButtton.waitForDisplayed({
-      timeout: 10000,
+      timeout: timeouts.default,
     });
     await restaurantAndCartLocators.submitButtton.click();
   }
 
   async clickOnFoodiLogo() {
     await restaurantAndCartLocators.foodiLogo.waitForDisplayed({
-      timeout: 10000,
+      timeout: timeouts.default,
     });
     await restaurantAndCartLocators.foodiLogo.click();
   }
@@ -50,7 +51,7 @@ class RestaurantAndCartActions {
       );
       try {
         await restaurant.scrollIntoView({ block: "center" });
-        await restaurant.waitForClickable({ timeout: 15000 });
+        await restaurant.waitForClickable({ timeout: timeouts.long });
         await restaurant.click();
         console.log(`✅ clicked restaurant, waiting for menu to load...`);
 
@@ -98,13 +99,13 @@ class RestaurantAndCartActions {
     console.log(`🚀 Selecting food item index: ${randomIndex + 1} / ${count}`);
     const item = visible[randomIndex];
     await item.scrollIntoView({ block: "center" });
-    await item.waitForClickable({ timeout: 15000 });
+    await item.waitForClickable({ timeout: timeouts.long });
     await item.click();
   }
 
   async clickAddToCartButton() {
     await restaurantAndCartLocators.addToCartButton.waitForDisplayed({
-      timeout: 10000,
+      timeout: timeouts.default,
     });
     await restaurantAndCartLocators.addToCartButton.click();
 
@@ -113,7 +114,7 @@ class RestaurantAndCartActions {
       await browser.waitUntil(
         async () => await restaurantAndCartLocators.checkoutButton.isDisplayed(),
         {
-          timeout: 20000,
+          timeout: timeouts.extraLong,
           interval: 500,
           timeoutMsg: "checkout button did not appear after adding item",
         }
@@ -128,10 +129,10 @@ class RestaurantAndCartActions {
     for (let i = 1; i <= maxAttempts; i++) {
       try {
         await restaurantAndCartLocators.checkoutButton.waitForDisplayed({
-          timeout: 10000,
+          timeout: timeouts.default,
         });
         await restaurantAndCartLocators.checkoutButton.scrollIntoView({ block: "center" });
-        await restaurantAndCartLocators.checkoutButton.waitForClickable({ timeout: 10000 });
+        await restaurantAndCartLocators.checkoutButton.waitForClickable({ timeout: timeouts.default });
         await restaurantAndCartLocators.checkoutButton.click();
         console.log(`✅ checkout button clicked successfully`);
         return;
@@ -176,7 +177,7 @@ class RestaurantAndCartActions {
       await browser.waitUntil(
         async () => /\d/.test(await el.getText()),
         {
-          timeout: 15000,
+          timeout: timeouts.long,
           timeoutMsg: "price text did not contain a digit",
         }
       );

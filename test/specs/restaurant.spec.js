@@ -2,22 +2,21 @@ const restaurantAndCartActions = require("../pages/restaurant and cart selection
 const auth = require("../utils/auth");
 const localStorage = require("../utils/localStorage");
 const captureLocationEveryRun = require("../setup/location.setup");
-const { credentials } = require("../../test-data/testData");
+const { credentials, timeouts } = require("../../test-data/testData");
+const fs = require("fs");
+const path = require("path");
 
 describe("Foodi's Restaurant selection and Food ordering", () => {
   before(async () => {
     await auth.loginAsValidUser(credentials.validUser.email, credentials.validUser.password);
 
-    await $('img[alt="Logo"]').waitForDisplayed({ timeout: 15000 });
+    await $('img[alt="Logo"]').waitForDisplayed({ timeout: timeouts.long });
 
     // Always capture fresh location
     await captureLocationEveryRun();
   });
 
   it("TC-005: Should load restaurants using stored dynamic location", async () => {
-    const fs = require("fs");
-    const path = require("path");
-
     const locationPath = path.resolve(
       __dirname,
       "../../test-data/location.json",
@@ -32,7 +31,7 @@ describe("Foodi's Restaurant selection and Food ordering", () => {
 
     await browser.refresh();
 
-    await $('img[alt="Logo"]').waitForDisplayed({ timeout: 15000 });
+    await $('img[alt="Logo"]').waitForDisplayed({ timeout: timeouts.long });
   });
 
   it("TC-006: Randomly select restaurant", async () => {
